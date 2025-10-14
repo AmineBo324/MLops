@@ -1,0 +1,20 @@
+# Environnements virtuels
+venv/
+.env/
+.venv/
+env/
+
+# Fichiers de modèles et checkpoints
+models/fine_tuned_model/
+models/checkpoint-*/
+models/*.pkl
+models/*.safetensors
+models/*.bin
+models/label_encoder.pkl
+models/ticket_classifier_model.pkl
+
+# Données
+*.csv
+*.json
+*.pkl
+*.pickle
