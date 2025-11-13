@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CallCenterAI - Assistant IA</title>
     <style>
         * {
@@ -402,12 +402,14 @@
         const SERVICE_URL = 'http://localhost:8003/route_agent';
         let isTyping = false;
 
+        // Auto-resize textarea
         const textarea = document.getElementById('messageInput');
         textarea.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 120) + 'px';
         });
 
+        // Send on Enter (without Shift)
         textarea.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -426,15 +428,18 @@
             
             if (!message || isTyping) return;
 
+            // Clear welcome message on first message
             const welcome = document.querySelector('.welcome-message');
             if (welcome) {
                 welcome.remove();
             }
 
+            // Add user message
             addMessage(message, 'user');
             input.value = '';
             input.style.height = 'auto';
 
+            // Show typing indicator
             showTyping();
 
             try {
@@ -498,10 +503,12 @@
             const content = document.createElement('div');
             content.className = 'message-content';
             
+            // Message text
             const textDiv = document.createElement('div');
             textDiv.className = 'message-text';
             textDiv.textContent = getBotMessage(result.category);
             
+            // Metadata
             const meta = document.createElement('div');
             meta.className = 'message-meta';
             
@@ -605,6 +612,7 @@
             messages.scrollTop = messages.scrollHeight;
         }
 
+        // Focus on input when page loads
         window.onload = function() {
             document.getElementById('messageInput').focus();
             console.log('🤖 CallCenterAI Chatbot chargé! v3.0');

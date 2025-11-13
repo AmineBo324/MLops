@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+#!/usr/bin/env python3
+"""Script pour créer l'interface chatbot"""
+
+html_content = """<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -375,9 +378,9 @@
                 <p>Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui ?</p>
                 <div class="suggestions">
                     <div class="suggestion" onclick="sendSuggestion('Ma facture est incorrecte')">💰 Problème de facture</div>
-                    <div class="suggestion" onclick="sendSuggestion('Je n\'arrive pas à me connecter')">🔐 Problème de connexion</div>
-                    <div class="suggestion" onclick="sendSuggestion('J\'ai besoin d\'aide technique')">🛠️ Support technique</div>
-                    <div class="suggestion" onclick="sendSuggestion('Je veux changer d\'offre')">📦 Changer d'offre</div>
+                    <div class="suggestion" onclick="sendSuggestion('Je n\\'arrive pas à me connecter')">🔐 Problème de connexion</div>
+                    <div class="suggestion" onclick="sendSuggestion('J\\'ai besoin d\\'aide technique')">🛠️ Support technique</div>
+                    <div class="suggestion" onclick="sendSuggestion('Je veux changer d\\'offre')">📦 Changer d'offre</div>
                 </div>
             </div>
         </div>
@@ -527,13 +530,13 @@
 
         function getBotMessage(category) {
             const messages = {
-                'Billing': 'J\'ai bien identifié votre demande comme une question de facturation. Un de nos conseillers spécialisés va vous contacter rapidement.',
+                'Billing': 'J\\'ai bien identifié votre demande comme une question de facturation. Un de nos conseillers spécialisés va vous contacter rapidement.',
                 'Technical': 'Je vois que vous avez un problème technique. Notre équipe support technique va prendre en charge votre demande.',
-                'Support': 'Votre demande d\'assistance a été enregistrée. Un conseiller va vous répondre dans les plus brefs délais.',
+                'Support': 'Votre demande d\\'assistance a été enregistrée. Un conseiller va vous répondre dans les plus brefs délais.',
                 'Sales': 'Je vous remercie pour votre intérêt. Un conseiller commercial va vous contacter pour discuter de votre projet.',
-                'Hardware': 'J\'ai identifié un problème matériel. Notre équipe technique va analyser votre cas.',
-                'Software': 'Problème logiciel détecté. L\'équipe de support va vous aider à le résoudre.',
-                'default': 'J\'ai bien reçu votre message. Un conseiller va traiter votre demande.'
+                'Hardware': 'J\\'ai identifié un problème matériel. Notre équipe technique va analyser votre cas.',
+                'Software': 'Problème logiciel détecté. L\\'équipe de support va vous aider à le résoudre.',
+                'default': 'J\\'ai bien reçu votre message. Un conseiller va traiter votre demande.'
             };
             return messages[category] || messages['default'];
         }
@@ -613,3 +616,11 @@
     </script>
 </body>
 </html>
+"""
+
+# Écrire le fichier
+output_path = "web_interface/index.html"
+with open(output_path, 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print(f"✅ Interface chatbot créée: {output_path}")
