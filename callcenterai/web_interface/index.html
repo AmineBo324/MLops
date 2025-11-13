@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CallCenterAI - Interface de Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #5a6c7d;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e8ecef;
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-section textarea {
+            width: 100%;
+            height: 120px;
+            border: 2px solid #e1e5e9;
+            border-radius: 15px;
+            padding: 15px;
+            font-size: 16px;
+            resize: vertical;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-section {
+            min-height: 400px;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+            transition: all 0.2s ease;
+        }
+
+        .result-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .result-category {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .result-confidence {
+            background: #3498db;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #e1e5e9;
+        }
+
+        .detail-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            animation: spin 1s linear infinite;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #e8ecef;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .examples {
+            margin-top: 20px;
+        }
+
+        .example-item {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #e8ecef;
+        }
+
+        .example-item:hover {
+            background: white;
+            border-color: #3498db;
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 6px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #e8ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 CallCenterAI</h1>
+            <p>Agent IA de Classification Intelligente</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Section Input -->
+            <div class="card input-section">
+                <h2><span class="emoji">📝</span>Saisir votre message</h2>
+                <textarea 
+                    id="textInput" 
+                    placeholder="Tapez votre message ici... (ex: Ma facture est incorrecte, Je n'arrive pas à me connecter, etc.)"
+                ></textarea>
+                
+                <div class="button-group">
+                    <button class="btn btn-success" onclick="predictAgent()" style="width: 100%;">
+                        <span class="emoji">🎯</span>Analyser avec l'Agent IA
+                    </button>
+                </div>
+
+                <div class="examples">
+                    <h3><span class="emoji">💡</span>Exemples à tester :</h3>
+                    <div class="example-item" onclick="setExample('Ma facture est incorrecte')">
+                        Ma facture est incorrecte
+                    </div>
+                    <div class="example-item" onclick="setExample('Je n\'arrive pas à me connecter à mon compte')">
+                        Je n'arrive pas à me connecter à mon compte
+                    </div>
+                    <div class="example-item" onclick="setExample('J\'ai besoin d\'aide pour configurer mon service')">
+                        J'ai besoin d'aide pour configurer mon service
+                    </div>
+                    <div class="example-item" onclick="setExample('Je souhaite changer d\'offre premium')">
+                        Je souhaite changer d'offre premium
+                    </div>
+                    <div class="example-item" onclick="setExample('Je rencontre un dysfonctionnement technique majeur avec l\'application')">
+                        Je rencontre un dysfonctionnement technique majeur avec l'application
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Résultats -->
+            <div class="card result-section">
+                <h2><span class="emoji">📊</span>Résultats</h2>
+                <div id="results">
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <span class="emoji">👆</span>
+                        <p>Saisissez un message et cliquez sur un bouton pour voir la prédiction</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number" id="totalPredictions">0</div>
+                <div class="stat-label">Prédictions Total</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgConfidence">0%</div>
+                <div class="stat-label">Confiance Moyenne</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgLatency">0ms</div>
+                <div class="stat-label">Latence Moyenne</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="mostCommon">-</div>
+                <div class="stat-label">Catégorie Populaire</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales pour les statistiques
+        let predictions = [];
+        let totalPredictions = 0;
+
+        // URLs des services (ajustez selon votre configuration)
+        const SERVICES = {
+            tfidf: 'http://localhost:8000',
+            transformer: 'http://localhost:8001', 
+            agent: 'http://localhost:8003'
+        };
+
+        // Fonction pour définir un exemple
+        function setExample(text) {
+            document.getElementById('textInput').value = text;
+        }
+
+        // Fonction pour afficher le loading
+        function showLoading() {
+            document.getElementById('results').innerHTML = `
+                <div class="loading">
+                    <span class="emoji">🔄</span>Traitement en cours...
+                </div>
+            `;
+        }
+
+        // Fonction pour afficher une erreur
+        function showError(message) {
+            document.getElementById('results').innerHTML = `
+                <div class="error">
+                    <span class="emoji">❌</span>
+                    <strong>Erreur:</strong> ${message}
+                </div>
+            `;
+        }
+
+        // Fonction pour afficher le résultat
+        function showResult(result, service, text, latency) {
+            const categoryEmojis = {
+                'facturation': '💳',
+                'technique': '🔧', 
+                'support': '🆘',
+                'commercial': '💼',
+                'billing': '💳',
+                'technical': '🔧'
+            };
+
+            const categoryColors = {
+                'facturation': '#4facfe',
+                'technique': '#f093fb',
+                'support': '#43e97b', 
+                'commercial': '#fa709a',
+                'billing': '#4facfe',
+                'technical': '#f093fb'
+            };
+
+            const emoji = categoryEmojis[result.category] || '📁';
+            const color = categoryColors[result.category] || '#667eea';
+
+            let resultHtml = `
+                <div class="result-item" style="border-left-color: ${color}">
+                    <div class="result-header">
+                        <div class="result-category">
+                            ${emoji} ${result.category.toUpperCase()}
+                        </div>
+                        <div class="result-confidence" style="background: linear-gradient(135deg, ${color}, ${color}dd)">
+                            ${Math.round(result.confidence * 100)}%
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                        <strong>Texte analysé:</strong><br>
+                        "${text}"
+                    </div>
+
+                    <div class="result-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Service</div>
+                            <div class="detail-value">${service.toUpperCase()}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Latence</div>
+                            <div class="detail-value">${latency}ms</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Modèle</div>
+                            <div class="detail-value">${result.model || result.model_used || 'IA'}</div>
+                        </div>
+            `;
+
+            // Ajouter des détails spécifiques selon le service
+            if (result.routed_to) {
+                resultHtml += `
+                        <div class="detail-item">
+                            <div class="detail-label">Routé vers</div>
+                            <div class="detail-value">${result.routed_to}</div>
+                        </div>
+                `;
+            }
+
+            if (result.processing_time) {
+                resultHtml += `
+                        <div class="detail-item">
+                            <div class="detail-label">Temps de traitement</div>
+                            <div class="detail-value">${Math.round(result.processing_time * 1000)}ms</div>
+                        </div>
+                `;
+            }
+
+            if (result.reasoning) {
+                resultHtml += `
+                    </div>
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                        <strong>🧠 Raisonnement:</strong><br>
+                        ${result.reasoning}
+                    </div>
+                `;
+            } else {
+                resultHtml += '</div>';
+            }
+
+            resultHtml += '</div>';
+
+            document.getElementById('results').innerHTML = resultHtml;
+
+            // Mettre à jour les statistiques
+            updateStats(result, latency);
+        }
+
+        // Fonction générique pour faire une prédiction
+        async function makePrediction(service, endpoint, text) {
+            if (!text.trim()) {
+                showError('Veuillez saisir un message');
+                return;
+            }
+
+            showLoading();
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch(`${SERVICES[service]}${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+
+                const latency = Date.now() - startTime;
+
+                if (!response.ok) {
+                    throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                
+                // Pour l'agent, extraire la prédiction
+                const prediction = result.prediction || result;
+                
+                showResult(prediction, service, text, latency);
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError(`Impossible de contacter le service ${service}. Assurez-vous qu'il est démarré.\n\nDétails: ${error.message}`);
+            }
+        }
+
+        function predictAgent() {
+            const text = document.getElementById('textInput').value;
+            makePrediction('agent', '/route_agent', text);
+        }
+
+        // Fonction pour mettre à jour les statistiques
+        function updateStats(result, latency) {
+            totalPredictions++;
+            predictions.push({
+                category: result.category,
+                confidence: result.confidence,
+                latency: latency
+            });
+
+            // Limiter l'historique à 100 prédictions
+            if (predictions.length > 100) {
+                predictions = predictions.slice(-100);
+            }
+
+            // Calculer les statistiques
+            const avgConfidence = predictions.reduce((sum, p) => sum + p.confidence, 0) / predictions.length;
+            const avgLatency = predictions.reduce((sum, p) => sum + p.latency, 0) / predictions.length;
+            
+            // Catégorie la plus commune
+            const categoryCount = {};
+            predictions.forEach(p => {
+                categoryCount[p.category] = (categoryCount[p.category] || 0) + 1;
+            });
+            const mostCommon = Object.keys(categoryCount).reduce((a, b) => 
+                categoryCount[a] > categoryCount[b] ? a : b, '-'
+            );
+
+            // Mettre à jour l'affichage
+            document.getElementById('totalPredictions').textContent = totalPredictions;
+            document.getElementById('avgConfidence').textContent = Math.round(avgConfidence * 100) + '%';
+            document.getElementById('avgLatency').textContent = Math.round(avgLatency) + 'ms';
+            document.getElementById('mostCommon').textContent = mostCommon || '-';
+        }
+
+        // Permettre l'envoi avec Entrée
+        document.getElementById('textInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.ctrlKey) {
+                predictAgent(); // Par défaut, utiliser l'agent
+            }
+        });
+
+        // Message d'aide initial
+        console.log('🤖 CallCenterAI Interface Web chargée! v2.0');
+        console.log('💡 Service Agent IA démarré sur:');
+        console.log('   • Agent Service: http://localhost:8003/route_agent');
+        console.log('✅ Prêt à analyser vos tickets!');
+    </script>
+</body>
+</html>
