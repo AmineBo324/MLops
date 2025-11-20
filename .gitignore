@@ -1,20 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.pyc
+
 # Environnements virtuels
 venv/
+env/
 .env/
 .venv/
-env/
+ENV/
+env.bak/
+venv.bak/
 
-# Fichiers de modèles et checkpoints
-models/fine_tuned_model/
-models/checkpoint-*/
+# Variables d'environnement sensibles
+.env
+
+# Modèles ML (trop volumineux pour GitHub)
+models/models/
 models/*.pkl
 models/*.safetensors
 models/*.bin
-models/label_encoder.pkl
-models/ticket_classifier_model.pkl
+models/checkpoint-*/
+*.pkl
+*.pth
+*.h5
+*.weights
 
 # Données
 *.csv
 *.json
-*.pkl
-*.pickle
+data/
+datasets/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Node
+node_modules/
+package-lock.json

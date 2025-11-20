@@ -19,12 +19,13 @@ app.add_middleware(
     expose_headers=["*"]
 )
 
-# Chemins des modèles
-MODEL_DIR = "/app/models/fine_tuned_model"
+# Chemins des modèles (support Docker et local)
+MODEL_DIR = os.getenv("MODEL_DIR", "../models/models/fine_tuned_model")
 LABEL_ENCODER_PATH = os.path.join(MODEL_DIR, "label_encoder.pkl")
 
 # Chargement du modèle au démarrage
 print("🔄 Chargement du modèle Transformer...")
+print(f"   📂 Chemin: {os.path.abspath(MODEL_DIR)}")
 try:
     tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
     model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
@@ -33,6 +34,7 @@ try:
     print("✅ Modèle Transformer chargé avec succès!")
 except Exception as e:
     print(f"❌ Erreur lors du chargement du modèle: {e}")
+    print(f"   ℹ️  Vérifiez que le modèle existe dans: {os.path.abspath(MODEL_DIR)}")
     tokenizer = None
     model = None
     label_encoder = None

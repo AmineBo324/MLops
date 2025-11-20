@@ -87,17 +87,17 @@
         .message {
             display: flex;
             gap: 12px;
-            animation: slideIn 0.3s ease;
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
@@ -203,13 +203,23 @@
             font-size: 15px;
             font-family: inherit;
             resize: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #messageInput:focus {
             outline: none;
             border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        #messageInput::placeholder {
+            color: #95a5a6;
+            transition: opacity 0.2s ease;
+        }
+        
+        #messageInput:focus::placeholder {
+            opacity: 0.5;
         }
 
         #sendButton {
@@ -371,13 +381,14 @@
     <div class="chat-container">
         <div class="messages" id="messages">
             <div class="welcome-message">
-                <h2>👋 Bienvenue !</h2>
-                <p>Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui ?</p>
+                <h2>👋 Bienvenue sur CallCenterAI</h2>
+                <p>Bonjour ! Je suis votre assistant virtuel intelligent, disponible 24/7 pour vous accompagner.<br>
+                Décrivez-moi votre besoin et je vais vous orienter vers le service le plus adapté.</p>
                 <div class="suggestions">
-                    <div class="suggestion" onclick="sendSuggestion('Ma facture est incorrecte')">💰 Problème de facture</div>
-                    <div class="suggestion" onclick="sendSuggestion('Je n\'arrive pas à me connecter')">🔐 Problème de connexion</div>
-                    <div class="suggestion" onclick="sendSuggestion('J\'ai besoin d\'aide technique')">🛠️ Support technique</div>
-                    <div class="suggestion" onclick="sendSuggestion('Je veux changer d\'offre')">📦 Changer d'offre</div>
+                    <div class="suggestion" onclick="sendSuggestion('Ma facture est incorrecte, pouvez-vous vérifier ?')">💰 Question de facturation</div>
+                    <div class="suggestion" onclick="sendSuggestion('Je n\'arrive pas à me connecter à mon compte')">🔐 Problème de connexion</div>
+                    <div class="suggestion" onclick="sendSuggestion('J\'ai besoin d\'une assistance technique')">🛠️ Assistance technique</div>
+                    <div class="suggestion" onclick="sendSuggestion('Je souhaite découvrir vos offres')">📦 Nos offres</div>
                 </div>
             </div>
         </div>
@@ -457,7 +468,7 @@
 
             } catch (error) {
                 hideTyping();
-                addErrorMessage('Désolé, je ne peux pas vous répondre pour le moment. Veuillez réessayer.');
+                addErrorMessage('Je rencontre actuellement des difficultés techniques. Notre équipe a été notifiée. Veuillez réessayer dans quelques instants ou contactez-nous directement.');
                 console.error('Erreur:', error);
             }
         }
@@ -498,22 +509,30 @@
             const content = document.createElement('div');
             content.className = 'message-content';
             
+            // Bloc de catégorie en premier
+            const categoryBlock = document.createElement('div');
+            categoryBlock.style.cssText = 'margin-bottom: 12px; padding: 8px 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; display: inline-block;';
+            categoryBlock.innerHTML = `<span style="color: white; font-weight: 600; font-size: 0.9em;">${getCategoryIcon(result.category)} ${formatCategory(result.category)}</span>`;
+            
             const textDiv = document.createElement('div');
             textDiv.className = 'message-text';
-            textDiv.textContent = getBotMessage(result.category);
+            
+            textDiv.appendChild(categoryBlock);
+            
+            const messageText = document.createElement('div');
+            messageText.textContent = getBotMessage(result.category);
+            messageText.style.marginTop = '8px';
+            textDiv.appendChild(messageText);
             
             const meta = document.createElement('div');
             meta.className = 'message-meta';
             
-            const categoryBadge = document.createElement('span');
-            categoryBadge.className = 'category-badge';
-            categoryBadge.innerHTML = `${getCategoryIcon(result.category)} ${formatCategory(result.category)}`;
-            
             const confidence = document.createElement('span');
             confidence.className = 'confidence';
-            confidence.textContent = `${(result.confidence * 100).toFixed(1)}% confiance`;
+            const confidencePercent = (result.confidence * 100).toFixed(0);
+            confidence.textContent = `Confiance: ${confidencePercent}%`;
+            confidence.style.color = confidencePercent >= 80 ? '#27ae60' : confidencePercent >= 60 ? '#f39c12' : '#95a5a6';
             
-            meta.appendChild(categoryBadge);
             meta.appendChild(confidence);
             
             content.appendChild(textDiv);
@@ -527,13 +546,13 @@
 
         function getBotMessage(category) {
             const messages = {
-                'Billing': 'J\'ai bien identifié votre demande comme une question de facturation. Un de nos conseillers spécialisés va vous contacter rapidement.',
-                'Technical': 'Je vois que vous avez un problème technique. Notre équipe support technique va prendre en charge votre demande.',
-                'Support': 'Votre demande d\'assistance a été enregistrée. Un conseiller va vous répondre dans les plus brefs délais.',
-                'Sales': 'Je vous remercie pour votre intérêt. Un conseiller commercial va vous contacter pour discuter de votre projet.',
-                'Hardware': 'J\'ai identifié un problème matériel. Notre équipe technique va analyser votre cas.',
-                'Software': 'Problème logiciel détecté. L\'équipe de support va vous aider à le résoudre.',
-                'default': 'J\'ai bien reçu votre message. Un conseiller va traiter votre demande.'
+                'Billing': 'Je comprends que vous avez une question concernant votre facturation. Nos conseillers spécialisés vont examiner votre dossier et vous apporter une réponse claire dans les meilleurs délais.',
+                'Technical': 'J\'ai bien noté votre problème technique. Notre équipe d\'experts va analyser la situation et vous proposer une solution adaptée rapidement.',
+                'Support': 'Merci de nous avoir contactés. Votre demande d\'assistance est maintenant prise en compte. Un de nos conseillers va vous accompagner personnellement.',
+                'Sales': 'Nous apprécions votre intérêt pour nos services. Un conseiller commercial expert va prendre contact avec vous pour comprendre vos besoins et vous proposer la meilleure solution.',
+                'Hardware': 'Votre problème matériel a été identifié. Notre équipe technique spécialisée va diagnostiquer le problème et vous guider vers la meilleure solution.',
+                'Software': 'J\'ai détecté un problème logiciel. Nos experts vont vous aider à le résoudre efficacement. En attendant, essayez de redémarrer l\'application.',
+                'default': 'Merci pour votre message. Je l\'ai bien enregistré et un conseiller qualifié va traiter votre demande avec attention.'
             };
             return messages[category] || messages['default'];
         }

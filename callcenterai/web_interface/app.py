@@ -14,11 +14,11 @@ app = Flask(__name__,
            static_url_path='')
 CORS(app)
 
-# Configuration des services
+# Configuration des services (avec support Docker)
 SERVICES = {
-    'tfidf': 'http://localhost:8000',
-    'transformer': 'http://localhost:8001',
-    'agent': 'http://localhost:8003'
+    'tfidf': os.getenv('TFIDF_SERVICE_URL', 'http://localhost:8000'),
+    'transformer': os.getenv('TRANSFORMER_SERVICE_URL', 'http://localhost:8001'),
+    'agent': os.getenv('AGENT_SERVICE_URL', 'http://localhost:8003')
 }
 
 # Statistiques globales
