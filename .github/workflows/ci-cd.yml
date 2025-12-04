@@ -125,7 +125,7 @@ jobs:
       
       - name: 🔒 Run Trivy security scan
         id: trivy
-        uses: aquasecurity/trivy-action@v1.2.0
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.service }}:latest
           format: 'sarif'
