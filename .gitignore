@@ -1,0 +1,78 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.pyc
+
+# Environnements virtuels
+venv/
+env/
+.env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Variables d'environnement sensibles
+.env
+
+# Modèles ML (trop volumineux pour GitHub)
+models/models/
+callcenterai/models/models/
+models/*.pkl
+models/*.safetensors
+models/*.bin
+models/checkpoint-*/
+*.pkl
+*.pth
+*.h5
+*.weights
+
+# Données
+*.csv
+*.json
+data/
+datasets/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Node
+node_modules/
+package-lock.json
+
+# MLflow
+mlruns/
+mlflow.db
+mlflow.db.lock
+
+# DVC
+/models/*.dvc
+/data/*.dvc
+.dvc/tmp/
+.dvc/cache/
