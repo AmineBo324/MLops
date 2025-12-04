@@ -1,0 +1,46 @@
+# DVC Pipeline - CallCenterAI
+# Pipeline MLOps pour l'entraînement du modèle de classification
+
+stages:
+  prepare:
+    cmd: python scripts/prepare_data.py
+    deps:
+      - scripts/prepare_data.py
+      - data/raw/all_tickets_processed_improved_v3.csv
+    params:
+      - prepare.test_size
+      - prepare.random_state
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+    metrics:
+      - data/processed/data_stats.json:
+          cache: false
+
+  train_tfidf:
+    cmd: python scripts/train_tfidf.py
+    deps:
+      - scripts/train_tfidf.py
+      - data/processed/train.csv
+      - data/processed/test.csv
+    params:
+      - train_tfidf.max_features
+      - train_tfidf.ngram_range
+      - train_tfidf.kernel
+      - train_tfidf.C
+    outs:
+      - models/ticket_classifier_model.pkl
+      - models/tfidf_vectorizer.pkl
+      - models/svm_model.pkl
+    metrics:
+      - models/metrics.json:
+          cache: false
+    plots:
+      - models/confusion_matrix.csv:
+          template: confusion
+          x: actual
+          y: predicted
+      - models/training_history.json:
+          template: simple
+          x: epoch
+          y: accuracy
