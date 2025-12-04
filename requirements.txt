@@ -1,8 +1,0 @@
-pandas
-scikit-learn
-transformers
-datasets
-evaluate
-torch==2.9.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
-
-joblib

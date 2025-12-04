@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-torch
-transformers
-joblib
-scikit-learn
-prometheus-client
-
