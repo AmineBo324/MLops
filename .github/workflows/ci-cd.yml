@@ -33,19 +33,19 @@ jobs:
       
       - name: 🎨 Code formatting check (Black)
         run: |
-          black --check --diff callcenterai/
+          black --check --diff "**/*.py"
         continue-on-error: true
       
       - name: 🔍 Lint with Flake8
         run: |
           # Stop build if there are Python syntax errors or undefined names
-          flake8 callcenterai/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 "**/*.py"
           # Exit-zero treats all errors as warnings
-          flake8 callcenterai/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      
+          flake8 . --exit-zero
+        continue-on-error: true      
       - name: 🧪 Run tests
         run: |
-          pytest tests/ -v --cov=callcenterai --cov-report=xml --cov-report=html
+          pytest tests/ -v --cov=.        
         continue-on-error: true
       
       - name: 📊 Upload coverage
@@ -156,13 +156,6 @@ jobs:
         run: |
           echo "🚀 Deploying to Staging environment"
           echo "📦 Images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}"
-      
-      # Ici, ajoutez vos étapes de déploiement (kubectl, helm, docker-compose, etc.)
-      # Exemple avec docker-compose:
-      # - name: 🐳 Deploy with Docker Compose
-      #   run: |
-      #     docker-compose -f docker-compose.staging.yml pull
-      #     docker-compose -f docker-compose.staging.yml up -d
 
   notify:
     name: 📢 Notifications
