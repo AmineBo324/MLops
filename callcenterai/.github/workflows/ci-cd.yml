@@ -2,7 +2,7 @@ name: CI/CD Pipeline - CallCenterAI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop-clean]
   pull_request:
     branches: [main]
 
@@ -12,31 +12,31 @@ env:
 
 jobs:
   lint-and-test:
-    name: 🔍 Lint & Tests
+    name:  Lint & Tests
     runs-on: ubuntu-latest
     
     steps:
-      - name: 📥 Checkout code
+      - name:  Checkout code
         uses: actions/checkout@v4
       
-      - name: 🐍 Setup Python
+      - name:  Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
       
-      - name: 📦 Install dependencies
+      - name:  Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest pytest-cov black
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       
-      - name: 🎨 Code formatting check (Black)
+      - name:  Code formatting check (Black)
         run: |
           black --check --diff callcenterai/
         continue-on-error: true
       
-      - name: 🔍 Lint with Flake8
+      - name:  Lint with Flake8
         run: |
           # Stop build if there are Python syntax errors or undefined names
           flake8 callcenterai/ --count --select=E9,F63,F7,F82 --show-source --statistics
