@@ -1,0 +1,20 @@
+# MLOps Dependencies - CallCenterAI
+
+# DVC - Data Version Control
+dvc==3.40.0
+dvc[s3]==3.40.0
+
+# MLflow - Experiment Tracking & Model Registry
+mlflow==2.10.0
+protobuf==4.25.2
+
+# Testing & Quality
+pytest==8.0.0
+pytest-cov==4.1.0
+black==24.2.0
+flake8==7.0.0
+bandit==1.7.7
+safety==3.0.1
+
+# Data processing (déjà dans requirements.txt principal)
+pyyaml==6.0.1
