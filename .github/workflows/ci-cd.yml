@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  security-events: read
+
 env:
   DOCKER_REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -16,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name:  Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
       
       - name: 🐍 Setup Python
@@ -32,21 +36,13 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       
       - name: 🎨 Code formatting check (Black)
-        run: |
-          black --check --diff "**/*.py"
-        continue-on-error: true
-      
+        run: black --check --diff .
+
       - name: 🔍 Lint with Flake8
-        run: |
-          # Stop build if there are Python syntax errors or undefined names
-          flake8 "**/*.py"
-          # Exit-zero treats all errors as warnings
-          flake8 . --exit-zero
-        continue-on-error: true      
+        run: flake8 .
+
       - name: 🧪 Run tests
-        run: |
-          pytest tests/ -v --cov=.        
-        continue-on-error: true
+        run: pytest tests/ -v --cov=.
       
       - name: 📊 Upload coverage
         uses: codecov/codecov-action@v4
@@ -71,14 +67,12 @@ jobs:
       - name: 🔍 Run Bandit (Python security)
         run: |
           pip install bandit
-          bandit -r callcenterai/ -f json -o bandit-report.json
-        continue-on-error: true
+          bandit -r . -f json -o bandit-report.json
       
       - name: 📦 Safety check (dependencies)
         run: |
           pip install safety
           safety check --json
-        continue-on-error: true
 
   build-and-push-docker:
     name: 🐳 Build & Push Docker Images
@@ -126,18 +120,28 @@ jobs:
           cache-to: type=gha,mode=max
       
       - name: 🔒 Run Trivy security scan
-        uses: aquasecurity/trivy-action@master
+        id: trivy
+        uses: aquasecurity/trivy-action@v1.2.0
         with:
           image-ref: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.service }}:latest
           format: 'sarif'
           output: 'trivy-results-${{ matrix.service }}.sarif'
         continue-on-error: true
       
+      - name: ✅ Check Trivy SARIF exists
+        id: check-sarif
+        run: |
+          if [ -f "trivy-results-${{ matrix.service }}.sarif" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+      
       - name: 📤 Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
+        if: steps.check-sarif.outputs.exists == 'true'
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: 'trivy-results-${{ matrix.service }}.sarif'
-        if: always()
 
   deploy-staging:
     name: 🚀 Deploy to Staging
@@ -168,4 +172,3 @@ jobs:
         run: |
           echo "Pipeline Status: ${{ job.status }}"
           echo "✅ Build completed"
-          # Ajoutez ici l'intégration avec Slack/Discord/Email si nécessaire
