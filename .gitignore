@@ -1,20 +1,155 @@
-# Environnements virtuels
+# Python caches and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
 venv/
-.env/
 .venv/
 env/
+ENV/
 
-# Fichiers de modèles et checkpoints
-models/fine_tuned_model/
-models/checkpoint-*/
+# Editor/IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Test caches
+.pytest_cache/
+
+# Logs
+logs/
+*.log
+
+# Environment / secrets
+.env
+.env.*
+
+# Data files (ignore large CSVs if you don't want to push data)
+all_tickets_processed_improved_v3.csv
+data/
+
+# DVC / ML metadata
+.dvc/
+dvc.lock
+
+# ML model artifacts and checkpoints (large files)
+# Adjust paths if your models are stored elsewhere
+callcenterai/models/models/
+**/checkpoint-*/
+**/*.safetensors
+**/*.pt
+**/*.pth
+**/optimizer.pt
+**/trainer_state.json
+
+# Hugging Face tokenizers/artifacts that may be regenerated or large
+**/tokenizer.json
+**/tokenizer_config.json
+**/vocab.txt
+**/special_tokens_map.json
+
+# Docker images / archives
+*.tar
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.pyc
+
+# Environnements virtuels
+venv/
+env/
+.env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Variables d'environnement sensibles
+.env
+
+# Modèles ML (trop volumineux pour GitHub)
+models/models/
 models/*.pkl
 models/*.safetensors
 models/*.bin
-models/label_encoder.pkl
-models/ticket_classifier_model.pkl
+models/checkpoint-*/
+*.pkl
+*.pth
+*.h5
+*.weights
 
 # Données
 *.csv
 *.json
-*.pkl
-*.pickle
+data/
+datasets/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Node
+node_modules/
+package-lock.json
+
+# MLflow
+mlruns/
+mlflow.db
+mlflow.db.lock
+
+# DVC
+/models/*.dvc
+/data/*.dvc
+.dvc/tmp/
+.dvc/cache/
+
+# ML models / checkpoints
+*.pt
+*.bin
+*.safetensors
+*.pth
+checkpoint*/
+wandb/
+mlruns/
+models/
+weights/
+artifacts/
+
+# Huggingface
+*.tokenizer.json
+*.model
+*.safetensors
+datasets/
